@@ -1,0 +1,50 @@
+<div class="modal fade" id="newEvent" tabindex="-1" role="dialog" aria-labelledby="newEventTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newEventTitle">新しい予定</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/events" method="post">
+          <div class="form-group">
+            <label class="col-sm-4 control-label">タイトル</label>
+            <input type="text" name="subject" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">開始</label>
+            <div class="input-group">
+              <input type="text" name="start_date" class="form-control col-sm-5 date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <span class="offset-sm-1"></span>
+              <input type="time" name="start_time" class="form-control col-sm-3"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">終了</label>
+            <div class="input-group">
+              <input type="text" name="end_date" class="form-control col-sm-5 date">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <span class="offset-sm-1"></span>
+              <input type="time" name="end_time" class="form-control col-sm-3"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">場所</label>
+            <input type="text" name="location" class="form-control">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        <button type="button" class="btn btn-primary" onclick="calendar_events.create_event(this);">登録</button>
+      </div>
+    </div>
+  </div>
+</div>

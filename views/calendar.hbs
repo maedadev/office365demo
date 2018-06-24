@@ -1,4 +1,7 @@
 <h2>予定表</h2>
+
+<button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#newEvent">予定を追加</button>
+
 <table class="table">
   <thead class="thead-light">
     <th scope="col">タイトル</th>
@@ -17,3 +20,5 @@
     {{/each}}
   </tbody>
 </table>
+
+{{> new_event }}

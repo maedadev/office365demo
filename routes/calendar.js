@@ -36,7 +36,7 @@ router.get('/', async function(req, res, next) {
       params.events = result.value;
       params.events.forEach(function(event) {
         if (event.start.dateTime) {
-          let utc = event.start.dateTime.slice(0, 19) + '+00:00'; // 2018-06-26T23:00:00.0000000 => 2018-06-26T23:00:00+00:00
+          let utc = event.start.dateTime.slice(0, 19) + '+00:00';
           event.start.dateTimeLocal = new Date(utc).toLocaleString().slice(0, 15);
         }
         if (event.end.dateTime) {
