@@ -1,0 +1,15 @@
+<h2>社員</h2>
+<table class="table">
+  <thead class="thead-light">
+    <th scope="col">氏名</th>
+    <th scope="col">メールアドレス</th>
+  </thead>
+  <tbody>
+    {{#each users}}
+      <tr>
+        <td>{{this.givenName}} {{this.surname}}</td>
+        <td>{{this.mail}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
