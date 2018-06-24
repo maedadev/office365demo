@@ -1,27 +1,18 @@
-{{! Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See LICENSE.txt in the project root for license information.}}
-<h2>Calendar</h2>
+<h2>予定表</h2>
 <table class="table">
   <thead class="thead-light">
-    <th scope="col">Subject</th>
-    <th scope="col">Start</th>
-    <th scope="col">End</th>
-    <th scope="col">Attendees</th>
+    <th scope="col">タイトル</th>
+    <th scope="col">開始</th>
+    <th scope="col">終了</th>
+    <th scope="col">場所</th>
   </thead>
   <tbody>
     {{#each events}}
       <tr>
         <td>{{this.subject}}</td>
-        <td>{{this.start.dateTime}} ({{this.start.timeZone}})</td>
-        <td>{{this.end.dateTime}} ({{this.end.timeZone}})</td>
-        <td>
-          <ul class="list-unstyled">
-            {{#each this.attendees}}
-              <li class="border p-1" title="{{this.emailAddress.address}}">
-                {{this.emailAddress.name}}
-              </li>
-            {{/each}}
-          </ul>
-        </td>
+        <td>{{this.start.dateTimeLocal}}</td>
+        <td>{{this.end.dateTimeLocal}}</td>
+        <td>{{this.location.displayName}}</td>
       </tr>
     {{/each}}
   </tbody>

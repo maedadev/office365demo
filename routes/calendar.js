@@ -6,13 +6,13 @@ var graph = require('@microsoft/microsoft-graph-client');
 
 /* GET /calendar */
 router.get('/', async function(req, res, next) {
-  let parms = { title: 'Calendar', active: { calendar: true } };
+  let params = { title: 'Calendar', active: { calendar: true } };
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
 
   if (accessToken && userName) {
-    parms.user = userName;
+    params.user = userName;
 
     // Initialize Graph client
     const client = graph.Client.init({
@@ -27,21 +27,32 @@ router.get('/', async function(req, res, next) {
     const end = new Date(new Date(start).setDate(start.getDate() + 7));
     
     try {
-      // Get the first 10 events for the coming week
       const result = await client
       .api(`/me/calendarView?startDateTime=${start.toISOString()}&endDateTime=${end.toISOString()}`)
       .top(10)
-      .select('subject,start,end,attendees')
-      .orderby('start/dateTime DESC')
+      .orderby('start/dateTime ASC')
       .get();
 
-      parms.events = result.value;
-      res.render('calendar', parms);
+      params.events = result.value;
+      params.events.forEach(function(event) {
+        if (event.start.dateTime) {
+          let utc = event.start.dateTime.slice(0, 19) + '+00:00'; // 2018-06-26T23:00:00.0000000 => 2018-06-26T23:00:00+00:00
+          event.start.dateTimeLocal = new Date(utc).toLocaleString().slice(0, 15);
+        }
+        if (event.end.dateTime) {
+          let utc = event.end.dateTime.slice(0, 19) + '+00:00';
+          event.end.dateTimeLocal = new Date(utc).toLocaleString().slice(0, 15);
+        }
+      });
+
+      params.debug = JSON.stringify(params.events, null, 2);
+
+      res.render('calendar', params);
     } catch (err) {
-      parms.message = 'Error retrieving events';
-      parms.error = { status: `${err.code}: ${err.message}` };
-      parms.debug = JSON.stringify(err.body, null, 2);
-      res.render('error', parms);
+      params.message = 'Error retrieving events';
+      params.error = { status: `${err.code}: ${err.message}` };
+      params.debug = JSON.stringify(err.body, null, 2);
+      res.render('error', params);
     }
     
   } else {
