@@ -45,7 +45,7 @@ router.get('/', async function(req, res, next) {
         }
       });
 
-      params.debug = JSON.stringify(params.events, null, 2);
+      //params.debug = JSON.stringify(params.events, null, 2);
 
       res.render('calendar', params);
     } catch (err) {
