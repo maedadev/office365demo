@@ -5,20 +5,20 @@ var authHelper = require('../helpers/auth');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  let parms = { title: 'Home', active: { home: true } };
+  let params = { title: 'Home', active: { home: true } };
 
   const accessToken = await authHelper.getAccessToken(req.cookies, res);
   const userName = req.cookies.graph_user_name;
 
   if (accessToken && userName) {
-    parms.user = userName;
-    parms.debug = `User: ${userName}\nAccess Token: ${accessToken}`;
+    params.user = userName;
+    params.debug = `User: ${userName}\nAccess Token: ${accessToken}`;
   } else {
-    parms.signInUrl = authHelper.getAuthUrl();
-    parms.debug = parms.signInUrl;
+    params.signInUrl = authHelper.getAuthUrl();
+    params.debug = params.signInUrl;
   }
 
-  res.render('index', parms);
+  res.render('index', params);
 });
 
 module.exports = router;
