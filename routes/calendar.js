@@ -24,12 +24,12 @@ router.get('/', async function(req, res, next) {
     // Set start of the calendar view to today at midnight
     const start = new Date(new Date().setHours(0,0,0));
     // Set end of the calendar view to 7 days from start
-    const end = new Date(new Date(start).setDate(start.getDate() + 7));
+    const end = new Date(new Date(start).setDate(start.getDate() + 365));
     
     try {
       const result = await client
       .api(`/me/calendarView?startDateTime=${start.toISOString()}&endDateTime=${end.toISOString()}`)
-      .top(10)
+      .top(20)
       .orderby('start/dateTime ASC')
       .get();
 
