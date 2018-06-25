@@ -8,6 +8,7 @@
     <th scope="col">開始</th>
     <th scope="col">終了</th>
     <th scope="col">場所</th>
+    <th scope="col">参加者</th>
   </thead>
   <tbody>
     {{#each events}}
@@ -16,6 +17,15 @@
         <td>{{this.start.dateTimeLocal}}</td>
         <td>{{this.end.dateTimeLocal}}</td>
         <td>{{this.location.displayName}}</td>
+        <td>
+          <ul class="list-unstyled">
+            {{#each this.attendees}}
+              <li class="border" title="{{this.emailAddress.address}}">
+                {{this.emailAddress.name}}
+              </li>
+            {{/each}}
+          </ul>
+        </td>
       </tr>
     {{/each}}
   </tbody>

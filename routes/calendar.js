@@ -37,15 +37,17 @@ router.get('/', async function(req, res, next) {
       params.events.forEach(function(event) {
         if (event.start.dateTime) {
           let utc = event.start.dateTime.slice(0, 19) + '+00:00';
-          event.start.dateTimeLocal = new Date(utc).toLocaleString().slice(0, 15);
+          let jst = new Date(utc).toLocaleString()
+          event.start.dateTimeLocal = jst.slice(0, jst.length -3);
         }
         if (event.end.dateTime) {
           let utc = event.end.dateTime.slice(0, 19) + '+00:00';
-          event.end.dateTimeLocal = new Date(utc).toLocaleString().slice(0, 15);
+          let jst = new Date(utc).toLocaleString()
+          event.end.dateTimeLocal = jst.slice(0, jst.length -3);
         }
       });
 
-      //params.debug = JSON.stringify(params.events, null, 2);
+      params.debug = JSON.stringify(params.events, null, 2);
 
       res.render('calendar', params);
     } catch (err) {
