@@ -27,8 +27,6 @@ router.get('/', async function(req, res, next) {
       const result = await client
       .api('/me/contacts')
       .top(10)
-      .select('givenName,surname,emailAddresses')
-      .orderby('givenName ASC')
       .get();
 
       parms.contacts = result.value;
