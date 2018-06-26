@@ -30,6 +30,7 @@ router.get('/', async function(req, res, next) {
       .get();
 
       parms.contacts = result.value;
+      parms.debug = JSON.stringify(parms.contacts, null, 2);
       res.render('contacts', parms);
     } catch (err) {
       parms.message = 'Error retrieving contacts';
