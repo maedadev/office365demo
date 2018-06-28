@@ -1,0 +1,99 @@
+<div class="modal fade" id="eventDialog" tabindex="-1" role="dialog" aria-labelledby="eventTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventTitle">\{{dialog_title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/events" method="post">
+          <div class="form-group">
+            <label class="col-sm-4 control-label">タイトル</label>
+            <input type="text" name="subject" class="form-control" v-model:key="subject"/>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">開始</label>
+            <div class="input-group">
+              <input type="text" name="start_date" class="form-control col-sm-5 date" v-model:key="start_date"/>
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <span class="offset-sm-1"></span>
+              <input type="time" name="start_time" class="form-control col-sm-3" v-model:key="start_time"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">終了</label>
+            <div class="input-group">
+              <input type="text" name="end_date" class="form-control col-sm-5 date" v-model:key="end_date"/>
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <span class="offset-sm-1"></span>
+              <input type="time" name="end_time" class="form-control col-sm-3" v-model:key="end_time"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">場所</label>
+            <input type="text" name="location" class="form-control" v-model:key="location"/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        <button type="button" class="btn btn-primary" v-on:click="submit">\{{submit_btn}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var event_vue = new Vue({
+  el: '#eventDialog',
+  data: { 
+    event_id: '',
+    subject: '',
+    start_date: '',
+    start_time: '',
+    end_date: '',
+    end_time: '',
+    location: '',
+    submit_btn: '登録',
+    action: 'create'
+  },
+  computed: {
+    dialog_title: function() {
+      if (this.submit_btn == '登録') {
+        return '新しい予定';
+      } else {
+        return this.subject + 'の編集';
+      }
+    }
+  },
+  methods: {
+    submit: function() {
+      calendar_events.submit_event();
+    },
+    setDatePicker: function() {
+      const self = this;
+
+      $('.date').datepicker({
+        format: "yyyy年mm月dd日",
+        language : 'ja',
+        autoclose: true
+      });
+      $('.date[name=start_date]').on('change', (e) => {
+        self.start_date = $(e.target).val()
+      });
+      $('.date[name=end_date]').on('change', (e) => {
+        self.end_date = $(e.target).val()
+      });
+    }
+  },
+  mounted: function() {
+    this.setDatePicker()
+  }
+});
+</script>

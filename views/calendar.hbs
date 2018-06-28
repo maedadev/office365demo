@@ -1,34 +1,85 @@
 <h2>予定表</h2>
 
-<button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#newEvent">予定を追加</button>
+<button type="button" class="btn-sm btn-primary" onclick="calendar_events.open_new_dialog();">予定を追加</button>
 
-<table class="table">
+<table class="table" id="eventList">
   <thead class="thead-light">
     <th scope="col">タイトル</th>
     <th scope="col">開始</th>
     <th scope="col">終了</th>
     <th scope="col">場所</th>
     <th scope="col">参加者</th>
+    <th scope="col"></th>
   </thead>
   <tbody>
-    {{#each events}}
-      <tr>
-        <td>{{this.subject}}</td>
-        <td>{{this.start.dateTimeLocal}}</td>
-        <td>{{this.end.dateTimeLocal}}</td>
-        <td>{{this.location.displayName}}</td>
-        <td>
-          <ul class="list-unstyled">
-            {{#each this.attendees}}
-              <li class="border" title="{{this.emailAddress.address}}">
-                {{this.emailAddress.name}}
-              </li>
-            {{/each}}
-          </ul>
-        </td>
-      </tr>
-    {{/each}}
+    <tr v-for="val in events" v-bind:event_id="val.id">
+      <td class="subject">\{{ val.subject }}</td>
+      <td class="start_time">\{{ val.start_time }}</td>
+      <td class="end_time">\{{ val.end_time }}</td>
+      <td class="location">\{{ val.location }}</td>
+      <td>
+        <ul class="list-unstyled">
+          <li class="border" v-for="attendee in val.attendees" v-bind:title="attendee.address">\{{attendee.name}}</li>
+        </ul>
+      </td>
+      <td>
+        <button type="button" class="btn-sm btn-primary" onclick="calendar_events.open_edit_dialog(this);">編集</button>
+        <button type="button" class="btn-sm btn-danger" onclick="calendar_events.delete_event(this);">削除</button>
+      </td>
+    </tr>
   </tbody>
 </table>
 
-{{> new_event }}
+{{> event_dialog }}
+
+<script>
+var event_list = new Vue({
+  el: '#eventList',
+  data: { 
+    events: [],
+    intervalid: ''
+  },
+  created: function() {
+    this.getEvents();
+    this.pollingEvents();
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalid)
+  },
+  methods : {
+    setEvents: function(_events){
+      var event_list = [];
+      $.each(_events, function(i, _event) {
+        var _id = _event.id;
+        _id = _id.replace(/&#x3D;/g, '=');
+        var event = {
+          id: _id,
+          subject: _event.subject,
+          start_time: _event.start.dateTimeLocal,
+          end_time: _event.end.dateTimeLocal,
+          location: _event.location.displayName,
+          attendees: []
+        }
+        $.each(_event.attendees, function(j, attendee) {
+          var attendee = {
+            address: attendee.emailAddress.address,
+            name: attendee.emailAddress.name
+          };
+          event.attendees.push(attendee);
+        });
+        event_list.push(event);
+      });
+      this.events = event_list;
+    },
+    getEvents: function(){
+      var that = this;
+      $.get('/events', {}, function(data) {
+        that.setEvents(data.events);
+      }, 'json');
+    },
+    pollingEvents: function(){
+      this.intervalid = setInterval(this.getEvents, 5000);
+    }
+  }
+});
+</script>
