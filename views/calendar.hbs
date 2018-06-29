@@ -1,34 +1,36 @@
 <h2>予定表</h2>
 
-<button type="button" class="btn-sm btn-primary" onclick="calendar_events.open_new_dialog();">予定を追加</button>
+<div id="eventList">
+  <button type="button" class="btn-sm btn-primary" v-on:click="newEvent">予定を追加</button>
 
-<table class="table" id="eventList">
-  <thead class="thead-light">
-    <th scope="col">タイトル</th>
-    <th scope="col">開始</th>
-    <th scope="col">終了</th>
-    <th scope="col">場所</th>
-    <th scope="col">参加者</th>
-    <th scope="col"></th>
-  </thead>
-  <tbody>
-    <tr v-for="val in events" v-bind:event_id="val.id">
-      <td class="subject">\{{ val.subject }}</td>
-      <td class="start_time">\{{ val.start_time }}</td>
-      <td class="end_time">\{{ val.end_time }}</td>
-      <td class="location">\{{ val.location }}</td>
-      <td>
-        <ul class="list-unstyled">
-          <li class="border" v-for="attendee in val.attendees" v-bind:title="attendee.address">\{{attendee.name}}</li>
-        </ul>
-      </td>
-      <td>
-        <button type="button" class="btn-sm btn-primary" onclick="calendar_events.open_edit_dialog(this);">編集</button>
-        <button type="button" class="btn-sm btn-danger" onclick="calendar_events.delete_event(this);">削除</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table">
+    <thead class="thead-light">
+      <th scope="col">タイトル</th>
+      <th scope="col">開始</th>
+      <th scope="col">終了</th>
+      <th scope="col">場所</th>
+      <th scope="col">参加者</th>
+      <th scope="col"></th>
+    </thead>
+    <tbody>
+      <tr v-for="val in events">
+        <td>\{{ val.subject }}</td>
+        <td>\{{ val.start_time }}</td>
+        <td>\{{ val.end_time }}</td>
+        <td>\{{ val.location }}</td>
+        <td>
+          <ul class="list-unstyled">
+            <li class="border" v-for="attendee in val.attendees" v-bind:title="attendee.address">\{{attendee.name}}</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" class="btn-sm btn-primary" v-on:click="editEvent(val)">編集</button>
+          <button type="button" class="btn-sm btn-danger" v-on:click="deleteEvent(val)">削除</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 {{> event_dialog }}
 
@@ -79,6 +81,15 @@ var event_list = new Vue({
     },
     pollingEvents: function(){
       this.intervalid = setInterval(this.getEvents, 5000);
+    },
+    newEvent: function() {
+      calendar_events.open_new_dialog();
+    },
+    editEvent: function(event) {
+      calendar_events.open_edit_dialog(event);
+    },
+    deleteEvent: function(event) {
+      calendar_events.delete_event(event);
     }
   }
 });
