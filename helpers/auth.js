@@ -6,8 +6,8 @@ const credentials = {
   },
   auth: {
     tokenHost: 'https://login.microsoftonline.com',
-    authorizePath: 'common/oauth2/v2.0/authorize',
-    tokenPath: 'common/oauth2/v2.0/token'
+    authorizePath: process.env.TENANT_ID + '/oauth2/v2.0/authorize',
+    tokenPath: process.env.TENANT_ID + '/oauth2/v2.0/token'
   }
 };
 const oauth2 = require('simple-oauth2').create(credentials);
